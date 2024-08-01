@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/common/main_scafold.dart';
+import 'package:mock_interviewer/core/widgets/main_scafold.dart';
 import 'package:mock_interviewer/features/history/history_screen.dart';
 import 'package:mock_interviewer/features/interview/interview_screen.dart';
 import 'package:mock_interviewer/features/study/study_screen.dart';

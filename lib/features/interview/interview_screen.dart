@@ -10,7 +10,7 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen> {
   @override
   Widget build(BuildContext context) {
-      return Center(
+      return const Center(
       child: Text('Interview'),
     );
   }

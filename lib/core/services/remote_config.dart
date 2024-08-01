@@ -6,10 +6,15 @@ abstract class RemoteConfigKeys {
 
 class RemoteConfig {
   static RemoteConfig instance = RemoteConfig._();
-  RemoteConfig._();
+  RemoteConfig._() {
+    _configs = FirebaseRemoteConfig.instance;
+    _configs.ensureInitialized();
+    _configs.fetchAndActivate();
+  }
+
+  late final FirebaseRemoteConfig _configs;
 
   String get geminiApiKey {
-    return FirebaseRemoteConfig.instance
-        .getString(RemoteConfigKeys.geminiApiKey);
+    return _configs.getString(RemoteConfigKeys.geminiApiKey);
   }
 }
