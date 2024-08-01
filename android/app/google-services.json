@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677972614013",
+    "project_id": "mock-interviewer-29bc5",
+    "storage_bucket": "mock-interviewer-29bc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677972614013:android:264a5f75258718be0bca14",
+        "android_client_info": {
+          "package_name": "com.example.mock_interviewer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX-kkJxkSleznruxaFTxYkrxXSRnFAkBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
