@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/common/main_scafold.dart';
 import 'package:mock_interviewer/features/history/history_screen.dart';
