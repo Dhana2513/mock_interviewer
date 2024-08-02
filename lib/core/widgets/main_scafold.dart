@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mock_interviewer/core/constant/text_style.dart';
 
 import '../constant/constants.dart';
-import '../extensions/text_size.dart';
 
 class MainScafold extends StatelessWidget {
   const MainScafold({
     super.key,
     this.body,
+    this.appBarTitle,
     this.floatingActionButton,
     this.bottomNavigationBar,
   });
 
+  final String? appBarTitle;
   final Widget? body;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
@@ -19,12 +21,9 @@ class MainScafold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          Constants.appName,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: TextSize.large,
-          ),
+        title: Text(
+          appBarTitle ?? Constants.appName,
+          style: UITextStyle.title.copyWith(color: Colors.white),
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),

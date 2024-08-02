@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/constant/asset_images.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
+import 'package:mock_interviewer/core/services/firestore.dart';
+import 'package:mock_interviewer/core/services/gen_ai.dart';
 
 import '../../shared/models/topic.dart';
+import '../../shared/types/topic_type.dart';
 
 class AddTopic extends StatefulWidget {
   const AddTopic({super.key});
@@ -18,6 +21,10 @@ class _AddTopicState extends State<AddTopic> {
   bool flutterSelected = true;
   bool dartSelected = false;
   bool otherSelected = false;
+
+  bool loading = false;
+
+  final focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +44,11 @@ class _AddTopicState extends State<AddTopic> {
           ),
           const SizedBox(height: BoxPadding.large),
           TextField(
+            focusNode: focusNode,
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), hintText: 'Topic Name'),
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.sentences,
             controller: topicNameController,
           ),
           const SizedBox(height: BoxPadding.basic),
@@ -82,32 +92,59 @@ class _AddTopicState extends State<AddTopic> {
             ],
           ),
           const SizedBox(height: BoxPadding.large),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor),
-              onPressed: () {
-                final topicName = topicNameController.text.trim();
-                final topicType = flutterSelected
-                    ? TopicType.flutter
-                    : dartSelected
-                        ? TopicType.dart
-                        : TopicType.other;
+          if (loading)
+            const CircularProgressIndicator()
+          else
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor),
+                onPressed: () async {
+                  final topicName = topicNameController.text.trim();
+                  final topicType = flutterSelected
+                      ? TopicType.flutter
+                      : dartSelected
+                          ? TopicType.dart
+                          : TopicType.other;
 
-                if (topicName.isEmpty) return;
+                  if (topicName.isEmpty) return;
 
-                Navigator.of(context)
-                    .pop(Topic(name: topicName, topicType: topicType));
-              },
-              child: const Text(
-                'Submit',
-                style: TextStyle(color: Colors.white),
+                  focusNode.unfocus();
+
+                  setState(() {
+                    loading = true;
+                  });
+                  
+                  final topic = Topic(name: topicName, topicType: topicType);
+
+                  final desciption =
+                      await GenAI.instance.topicResponse(topic: topic);
+                  topic.description = desciption;
+
+                  await Firestore.instance.addTopic(topic);
+
+                  setState(() {
+                    loading = false;
+                  });
+
+                  popDialog();
+                },
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
+          const SizedBox(
+            height: BoxPadding.basic,
           )
         ],
       ),
     );
+  }
+
+  void popDialog() {
+    Navigator.of(context).pop();
   }
 }

@@ -16,6 +16,7 @@ dependencies:
   firebase_storage: ^12.1.2
   firebase_remote_config: ^5.0.4
   flutter_markdown: ^0.7.3
+  cloud_firestore: ^5.2.0
 
 dev_dependencies:
   flutter_test:
