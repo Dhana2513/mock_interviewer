@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/constant/asset_images.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
@@ -22,7 +23,7 @@ class _AddTopicState extends State<AddTopic> {
   bool dartSelected = false;
   bool otherSelected = false;
 
-  bool loading = false;
+  final loadingNotifier = ValueNotifier<bool>(false);
 
   final focusNode = FocusNode();
 
@@ -92,53 +93,58 @@ class _AddTopicState extends State<AddTopic> {
             ],
           ),
           const SizedBox(height: BoxPadding.large),
-          if (loading)
-            const CircularProgressIndicator()
-          else
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor),
-                onPressed: () async {
-                  final topicName = topicNameController.text.trim();
-                  final topicType = flutterSelected
-                      ? TopicType.flutter
-                      : dartSelected
-                          ? TopicType.dart
-                          : TopicType.other;
+          SizedBox(
+            height: BoxPadding.xLarge,
+            child: ValueListenableBuilder(
+              valueListenable: loadingNotifier,
+              builder: (context, loading, child) {
+                if (loading) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor),
+                      onPressed: () async {
+                        final topicName = topicNameController.text.trim();
+                        final topicType = flutterSelected
+                            ? TopicType.flutter
+                            : dartSelected
+                                ? TopicType.dart
+                                : TopicType.other;
 
-                  if (topicName.isEmpty) return;
+                        if (topicName.isEmpty) return;
 
-                  focusNode.unfocus();
+                        focusNode.unfocus();
+                        loadingNotifier.value = true;
 
-                  setState(() {
-                    loading = true;
-                  });
-                  
-                  final topic = Topic(name: topicName, topicType: topicType);
+                        final topic = Topic(
+                          name: topicName,
+                          topicType: topicType,
+                        );
 
-                  final desciption =
-                      await GenAI.instance.topicResponse(topic: topic);
-                  topic.description = desciption;
+                        final desciption =
+                            await GenAI.instance.topicResponse(topic: topic);
+                        topic.description = desciption;
 
-                  await Firestore.instance.addTopic(topic);
+                        await Firestore.instance.addTopic(topic);
 
-                  setState(() {
-                    loading = false;
-                  });
+                        loadingNotifier.value = false;
 
-                  popDialog();
-                },
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+                        popDialog();
+                      },
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-          const SizedBox(
-            height: BoxPadding.basic,
-          )
+          ),
+          const SizedBox(height: BoxPadding.basic)
         ],
       ),
     );

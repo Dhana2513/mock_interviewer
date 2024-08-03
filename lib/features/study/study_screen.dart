@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/constant/text_style.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/columnx.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
-import 'package:mock_interviewer/core/services/gen_ai.dart';
 import 'package:mock_interviewer/features/study/add_topic.dart';
 import 'package:mock_interviewer/features/study/topic_decription_screen.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
@@ -18,7 +15,8 @@ class StudyScreen extends StatefulWidget {
   State<StudyScreen> createState() => _StudyScreenState();
 }
 
-class _StudyScreenState extends State<StudyScreen> with AutomaticKeepAliveClientMixin {
+class _StudyScreenState extends State<StudyScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -61,9 +59,21 @@ class _StudyScreenState extends State<StudyScreen> with AutomaticKeepAliveClient
             StreamBuilder<List<Topic>>(
                 stream: Firestore.instance.topicStream.stream,
                 builder: (context, snapshot) {
-                  final topics = snapshot.data ?? [];
+                  final unfilteredTopics = snapshot.data ?? [];
+                  final otherTopics = unfilteredTopics
+                      .where((topic) => topic.topicType == TopicType.other);
 
-                  log('dddd : topics : $topics');
+                  final dartTopics = unfilteredTopics
+                      .where((topic) => topic.topicType == TopicType.dart);
+
+                  final flutterTopics = unfilteredTopics
+                      .where((topic) => topic.topicType == TopicType.flutter);
+
+                  final topics = [
+                    ...otherTopics,
+                    ...dartTopics,
+                    ...flutterTopics
+                  ];
 
                   if (topics.isEmpty) {
                     return const Center(
@@ -90,10 +100,12 @@ class _StudyScreenState extends State<StudyScreen> with AutomaticKeepAliveClient
                                 horizontal: BoxPadding.small),
                             child: ListTile(
                               onTap: () {
-
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                         TopicDescriptionScreen(topics: topics,index: index,)));
+                                        TopicDescriptionScreen(
+                                          topics: topics,
+                                          index: index,
+                                        )));
                               },
                               tileColor: Colors.white,
                               shape: const RoundedRectangleBorder(
@@ -131,7 +143,7 @@ class _StudyScreenState extends State<StudyScreen> with AutomaticKeepAliveClient
       ],
     );
   }
-  
+
   @override
   bool get wantKeepAlive => true;
 }
