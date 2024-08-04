@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:mock_interviewer/core/widgets/main_scafold.dart';
+import 'package:mock_interviewer/core/widgets/main_scaffold.dart';
 
 import '../../shared/models/topic.dart';
 
@@ -36,7 +36,7 @@ class _TopicDescriptionScreenState extends State<TopicDescriptionScreen> {
     return PageView(
       controller: pageController,
       children: widget.topics
-          .map((topic) => MainScafold(
+          .map((topic) => MainScaffold(
                 appBarTitle: topic.name,
                 body: Markdown(
                   data: topic.description ?? '',

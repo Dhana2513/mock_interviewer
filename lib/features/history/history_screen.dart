@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mock_interviewer/core/constants/constants.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -12,7 +13,7 @@ class _HistoryScreenState extends State<HistoryScreen> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     super.build(context);
     return const Center(
-      child: Text('History'),
+      child: Text(Constants.history),
     );
   }
 

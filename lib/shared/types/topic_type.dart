@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constant/asset_images.dart';
+import '../../core/constants/asset_images.dart';
 
 enum TopicType { dart, flutter, other }
 

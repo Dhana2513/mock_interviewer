@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/constant/text_style.dart';
 
-import '../constant/constants.dart';
+import '../constants/constants.dart';
+import '../constants/text_style.dart';
 
-class MainScafold extends StatelessWidget {
-  const MainScafold({
+
+class MainScaffold extends StatelessWidget {
+  const MainScaffold({
     super.key,
     this.body,
     this.appBarTitle,

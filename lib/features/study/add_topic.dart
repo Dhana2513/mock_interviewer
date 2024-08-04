@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/constant/asset_images.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/core/services/gen_ai.dart';
 
+import '../../core/constants/asset_images.dart';
+import '../../core/constants/constants.dart';
 import '../../shared/models/topic.dart';
 import '../../shared/types/topic_type.dart';
 
@@ -36,7 +36,7 @@ class _AddTopicState extends State<AddTopic> {
         children: [
           const SizedBox(height: BoxPadding.xSmall),
           Text(
-            'Add Topic',
+            Constants.addTopic,
             style: TextStyle(
               fontSize: TextSize.large,
               fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class _AddTopicState extends State<AddTopic> {
           TextField(
             focusNode: focusNode,
             decoration: const InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Topic Name'),
+                border: OutlineInputBorder(), hintText: Constants.topicName),
             keyboardType: TextInputType.name,
             textCapitalization: TextCapitalization.sentences,
             controller: topicNameController,
@@ -59,7 +59,7 @@ class _AddTopicState extends State<AddTopic> {
             children: [
               FilterChip(
                 selected: flutterSelected,
-                label: const Text('Flutter'),
+                label: const Text(Constants.flutter),
                 avatar: Image(image: AssetImages.shared.flutter),
                 onSelected: (selected) {
                   flutterSelected = true;
@@ -70,7 +70,7 @@ class _AddTopicState extends State<AddTopic> {
               ),
               FilterChip(
                 selected: dartSelected,
-                label: const Text('Dart'),
+                label: const Text(Constants.dart),
                 avatar: Image(image: AssetImages.shared.dart),
                 onSelected: (selected) {
                   flutterSelected = false;
@@ -81,7 +81,7 @@ class _AddTopicState extends State<AddTopic> {
               ),
               FilterChip(
                 selected: otherSelected,
-                label: const Text('Other'),
+                label: const Text(Constants.other),
                 avatar: Image(image: AssetImages.shared.curly),
                 onSelected: (selected) {
                   flutterSelected = false;
@@ -124,9 +124,9 @@ class _AddTopicState extends State<AddTopic> {
                           topicType: topicType,
                         );
 
-                        final desciption =
+                        final description =
                             await GenAI.instance.topicResponse(topic: topic);
-                        topic.description = desciption;
+                        topic.description = description;
 
                         await Firestore.instance.addTopic(topic);
 
@@ -135,7 +135,7 @@ class _AddTopicState extends State<AddTopic> {
                         popDialog();
                       },
                       child: const Text(
-                        'Submit',
+                        Constants.submit,
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

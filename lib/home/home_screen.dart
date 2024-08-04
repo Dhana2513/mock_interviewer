@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/widgets/main_scafold.dart';
+import 'package:mock_interviewer/core/widgets/main_scaffold.dart';
 import 'package:mock_interviewer/features/history/history_screen.dart';
 import 'package:mock_interviewer/features/interview/interview_screen.dart';
 import 'package:mock_interviewer/features/study/study_screen.dart';
@@ -12,24 +12,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int bottonNavIndex = 0;
+  int bottomNavIndex = 0;
   late final PageController pageController;
 
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: bottonNavIndex);
+    pageController = PageController(initialPage: bottomNavIndex);
   }
 
   void updateIndex(int index) {
     setState(() {
-      bottonNavIndex = index;
+      bottomNavIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MainScafold(
+    return MainScaffold(
       body: PageView(
         controller: pageController,
         onPageChanged: (index) => updateIndex(index),
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: bottonNavIndex,
+        currentIndex: bottomNavIndex,
         onTap: (index) {
           updateIndex(index);
           pageController.jumpToPage(index);

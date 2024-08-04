@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/constant/text_style.dart';
+import 'package:mock_interviewer/core/constants/constants.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/columnx.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/features/study/add_topic.dart';
-import 'package:mock_interviewer/features/study/topic_decription_screen.dart';
+import 'package:mock_interviewer/features/study/topic_description_screen.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
 import 'package:mock_interviewer/shared/types/topic_type.dart';
+
+import '../../core/constants/text_style.dart';
 
 class StudyScreen extends StatefulWidget {
   const StudyScreen({super.key});
@@ -33,7 +35,7 @@ class _StudyScreenState extends State<StudyScreen>
               builder: (context) {
                 return Dialog(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(BoxPadding.medium),
                   ),
                   child: const AddTopic(),
                 );
@@ -54,7 +56,7 @@ class _StudyScreenState extends State<StudyScreen>
           children: [
             const Padding(
               padding: EdgeInsets.all(BoxPadding.basic),
-              child: Text('Topics', style: UITextStyle.title),
+              child: Text(Constants.topics, style: UITextStyle.title),
             ),
             StreamBuilder<List<Topic>>(
                 stream: Firestore.instance.topicStream.stream,
@@ -80,8 +82,7 @@ class _StudyScreenState extends State<StudyScreen>
                       child: Padding(
                         padding: EdgeInsets.all(BoxPadding.basic),
                         child: Text(
-                          'Add a topics by clicking on the add button, your added '
-                          'topics will be shown here.',
+                          Constants.noTopicsMessage,
                           style: UITextStyle.bodyLarge,
                         ),
                       ),
@@ -129,8 +130,7 @@ class _StudyScreenState extends State<StudyScreen>
                                     color: Colors.grey.shade400,
                                   ),
                                 ),
-                                onPressed: () =>
-                                    Firestore.instance.deleteTopic(topic),
+                                onPressed: () => showDeleteAlert(topic: topic),
                               ),
                             ),
                           ),
@@ -141,6 +141,31 @@ class _StudyScreenState extends State<StudyScreen>
         ),
         addTopicButton,
       ],
+    );
+  }
+
+  void showDeleteAlert({required Topic topic}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${Constants.delete} ${topic.name}?'),
+          content: Text('${Constants.deleteAlertText} ${topic.name}?'),
+          actions: [
+            TextButton(
+              child: const Text(Constants.delete),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Firestore.instance.deleteTopic(topic);
+              },
+            ),
+            TextButton(
+              child: const Text(Constants.cancel),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
     );
   }
 
