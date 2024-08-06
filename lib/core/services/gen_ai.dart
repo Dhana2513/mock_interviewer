@@ -9,6 +9,7 @@ class GenAI {
   static GenAI instance = GenAI._();
 
   GenAI._() {
+    log('dddd:  genAI : apiKey: ${RemoteConfig.instance.geminiApiKey}');
     _genAIModel = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: RemoteConfig.instance.geminiApiKey,

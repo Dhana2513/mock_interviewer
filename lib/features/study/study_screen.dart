@@ -154,7 +154,7 @@ class _StudyScreenState extends State<StudyScreen>
           actions: [
             TextButton(
               child: const Text(Constants.delete),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
                 Firestore.instance.deleteTopic(topic);
               },
