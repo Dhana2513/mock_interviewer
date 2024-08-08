@@ -9,14 +9,11 @@ abstract class Constants {
   static const dart = 'Dart';
   static const other = 'Other';
   static const submit = 'Submit';
-
   static const noTopicsMessage =
       'Add a topics by clicking on the add button, your added '
       'topics will be shown here.';
-
   static const cancel = 'cancel';
-
   static const delete = 'Delete';
-
   static const deleteAlertText = 'Are you sure you want to delete';
+  static const study = 'Study';
 }
