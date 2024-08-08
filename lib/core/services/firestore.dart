@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
 
-abstract class FirestoreKey {
+abstract class _FirestoreKey {
   static const topics = 'topics';
 }
 
@@ -13,7 +13,7 @@ class Firestore {
   Firestore._() {
     _firestore = FirebaseFirestore.instance;
 
-    _topics = _firestore.collection(FirestoreKey.topics);
+    _topics = _firestore.collection(_FirestoreKey.topics);
   }
 
   late final FirebaseFirestore _firestore;

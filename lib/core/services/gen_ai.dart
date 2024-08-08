@@ -18,21 +18,44 @@ class GenAI {
   late final GenerativeModel _genAIModel;
 
   Future<String> topicResponse({required Topic topic}) async {
-    final initText = topic.topicType == TopicType.dart
-        ? 'dart: '
-        : topic.topicType == TopicType.flutter
-            ? 'flutter: '
-            : '';
+    try {
+      final initText = topic.topicType == TopicType.dart
+          ? 'dart: '
+          : topic.topicType == TopicType.flutter
+              ? 'flutter: '
+              : '';
 
-    final prompt =
-        'Explain $initText${topic.name} in detail, include images and example. format the answer as markdown';
+      final prompt = RemoteConfig.instance.topicPrompt
+          .replaceAll('<<topicName>>', '$initText${topic.name}');
 
-    log('dddd :added prompt : $prompt');
+      log('dddd :added prompt : $prompt');
 
-    final content = [Content.text(prompt)];
-    final response = await _genAIModel.generateContent(content);
+      final content = [Content.text(prompt)];
+      final response = await _genAIModel.generateContent(content);
 
-    log('dddd : topic response : ${response.text}');
-    return response.text ?? '';
+      log('dddd : topic response : ${response.text}');
+      return response.text ?? '';
+    } on Exception catch (e) {
+      return '';
+    }
+  }
+
+  Future<String> getQuestions({required List<Topic> topics}) async {
+    try {
+      final topicNames = topics.map((topic) => topic.name).toList();
+
+      final prompt = RemoteConfig.instance.interviewPrompt
+          .replaceAll('<<topicList>>', '$topicNames');
+
+      log('dddd :added prompt : $prompt');
+
+      final content = [Content.text(prompt)];
+      final response = await _genAIModel.generateContent(content);
+
+      log('dddd : topic response : ${response.text}');
+      return response.text ?? '';
+    } on Exception catch (e) {
+      return '';
+    }
   }
 }

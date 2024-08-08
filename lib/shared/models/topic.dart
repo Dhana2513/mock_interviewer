@@ -3,7 +3,7 @@ import '../../core/constants/asset_images.dart';
 
 part '../types/topic_type.dart';
 
-abstract class TopicKey {
+abstract class _TopicKey {
   static const name = 'name';
   static const topicType = 'topicType';
 
@@ -18,12 +18,14 @@ class Topic {
   final TopicType topicType;
   String? documentID;
   String? description;
+  bool? selected;
 
   Topic({
     required this.name,
     required this.topicType,
     this.documentID,
     this.description,
+    this.selected,
   });
 
   factory Topic.fromJson({
@@ -32,17 +34,33 @@ class Topic {
   }) {
     return Topic(
       documentID: documentID,
-      name: json[TopicKey.name],
-      topicType: TopicTypeX.fromString(json[TopicKey.topicType]),
-      description: json[TopicKey.description],
+      name: json[_TopicKey.name],
+      topicType: TopicTypeX.fromString(json[_TopicKey.topicType]),
+      description: json[_TopicKey.description],
+    );
+  }
+
+  Topic copyWith({
+    String? name,
+    TopicType? topicType,
+    String? documentID,
+    String? description,
+    bool? selected,
+  }) {
+    return Topic(
+      name: name ?? this.name,
+      topicType: topicType ?? this.topicType,
+      documentID: documentID ?? this.documentID,
+      description: description ?? this.description,
+      selected: selected ?? this.selected,
     );
   }
 
   Map<String, dynamic>? toJson() {
     return {
-      TopicKey.name: name,
-      TopicKey.topicType: topicType.name,
-      TopicKey.description: description,
+      _TopicKey.name: name,
+      _TopicKey.topicType: topicType.name,
+      _TopicKey.description: description,
     };
   }
 }

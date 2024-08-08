@@ -18,4 +18,7 @@ abstract class Constants {
   static const study = 'Study';
 
   static const startInterview = 'Start Interview';
+
+  static const errorOccurred = 'Error Occurred while generating content ...';
+
 }

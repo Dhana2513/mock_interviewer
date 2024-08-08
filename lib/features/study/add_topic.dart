@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mock_interviewer/core/constants/text_style.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
@@ -23,7 +24,7 @@ class _AddTopicState extends State<AddTopic> {
   bool dartSelected = false;
   bool otherSelected = false;
 
-  final loadingNotifier = ValueNotifier<bool>(false);
+  final loadingNotifier = ValueNotifier<bool?>(false);
 
   final focusNode = FocusNode();
 
@@ -98,13 +99,22 @@ class _AddTopicState extends State<AddTopic> {
             child: ValueListenableBuilder(
               valueListenable: loadingNotifier,
               builder: (context, loading, child) {
-                if (loading) {
+                if (loading == null) {
+                  return Center(
+                    child: Text(
+                      Constants.errorOccurred,
+                      style: UITextStyle.body.copyWith(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                } else if (loading == true) {
                   return const CircularProgressIndicator();
                 } else {
                   return SizedBox(
                     width: double.infinity,
                     child: UIButton(
-                     onPressed: () async {
+                      onPressed: () async {
                         final topicName = topicNameController.text.trim();
                         final topicType = flutterSelected
                             ? TopicType.flutter
@@ -124,15 +134,16 @@ class _AddTopicState extends State<AddTopic> {
 
                         final description =
                             await GenAI.instance.topicResponse(topic: topic);
-                        topic.description = description;
-
-                        await Firestore.instance.addTopic(topic);
-
-                        loadingNotifier.value = false;
-
-                        popDialog();
+                        if (description.isNotEmpty) {
+                          topic.description = description;
+                          await Firestore.instance.addTopic(topic);
+                          loadingNotifier.value = false;
+                          popDialog();
+                        } else {
+                          loadingNotifier.value = null;
+                        }
                       },
-                     title:  Constants.submit,
+                      title: Constants.submit,
                     ),
                   );
                 }
