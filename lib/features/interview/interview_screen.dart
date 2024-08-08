@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/constants/constants.dart';
 import 'package:mock_interviewer/core/constants/text_style.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/columnx.dart';
-import 'package:mock_interviewer/core/extensions/list_extension.dart';
 import 'package:mock_interviewer/core/widgets/ui_button.dart';
+import 'package:mock_interviewer/shared/models/question.dart';
 
 import '../../core/extensions/wrapx.dart';
 import '../../core/services/firestore.dart';
@@ -21,6 +22,7 @@ class InterviewScreen extends StatefulWidget {
 class _InterviewScreenState extends State<InterviewScreen>
     with AutomaticKeepAliveClientMixin {
   final List<List<Topic>> allTopics = [];
+  final loadingNotifier = ValueNotifier<bool?>(false);
 
   @override
   void initState() {
@@ -48,13 +50,14 @@ class _InterviewScreenState extends State<InterviewScreen>
     allTopics.add(listByTopicType(TopicType.flutter));
   }
 
-  void startInterview() {
+  void startInterview() async {
     final topics = <Topic>[];
     for (final item in allTopics) {
       topics.addAll(item.where((topic) => topic.selected == true).toList());
     }
 
-    GenAI.instance.getQuestions(topics: topics);
+    final result = await GenAI.instance.getQuestions(topics: topics);
+    final questions = Question.fromJsonList(json: result);
   }
 
   @override
@@ -115,9 +118,20 @@ class _InterviewScreenState extends State<InterviewScreen>
                   );
                 }),
             const SizedBox(height: BoxPadding.medium),
-            UIButton(
-              onPressed: startInterview,
-              title: Constants.startInterview,
+            SizedBox(
+              height: BoxPadding.xLarge + BoxPadding.small,
+              child: ValueListenableBuilder(
+                  valueListenable: loadingNotifier,
+                  builder: (context, loading, child) {
+                    if (loading == true) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    return UIButton(
+                      onPressed: startInterview,
+                      title: Constants.startInterview,
+                    );
+                  }),
             ),
           ],
         ),

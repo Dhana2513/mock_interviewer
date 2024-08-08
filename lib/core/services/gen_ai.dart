@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -8,7 +9,6 @@ class GenAI {
   static GenAI instance = GenAI._();
 
   GenAI._() {
-    log('dddd:  genAI : apiKey: ${RemoteConfig.instance.geminiApiKey}');
     _genAIModel = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: RemoteConfig.instance.geminiApiKey,
@@ -40,7 +40,9 @@ class GenAI {
     }
   }
 
-  Future<String> getQuestions({required List<Topic> topics}) async {
+  Future<List<Map<String, dynamic>>> getQuestions({
+    required List<Topic> topics,
+  }) async {
     try {
       final topicNames = topics.map((topic) => topic.name).toList();
 
@@ -50,12 +52,17 @@ class GenAI {
       log('dddd :added prompt : $prompt');
 
       final content = [Content.text(prompt)];
-      final response = await _genAIModel.generateContent(content);
+      final response = await _genAIModel.generateContent(
+        content,
+        generationConfig: GenerationConfig(
+          responseMimeType: 'application/json',
+        ),
+      );
 
       log('dddd : topic response : ${response.text}');
-      return response.text ?? '';
+      return jsonDecode(response.text ?? '[]');
     } on Exception catch (e) {
-      return '';
+      return [];
     }
   }
 }
