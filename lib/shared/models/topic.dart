@@ -1,4 +1,7 @@
-import '../types/topic_type.dart';
+import 'package:flutter/material.dart';
+import '../../core/constants/asset_images.dart';
+
+part '../types/topic_type.dart';
 
 abstract class TopicKey {
   static const name = 'name';

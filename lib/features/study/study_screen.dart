@@ -6,7 +6,6 @@ import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/features/study/add_topic.dart';
 import 'package:mock_interviewer/features/study/topic_description_screen.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
-import 'package:mock_interviewer/shared/types/topic_type.dart';
 
 import '../../core/constants/text_style.dart';
 
@@ -167,6 +166,12 @@ class _StudyScreenState extends State<StudyScreen>
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Firestore.instance.dispose();
   }
 
   @override

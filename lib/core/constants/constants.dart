@@ -1,4 +1,4 @@
-final class Constants {
+abstract class Constants {
   static const appName = 'Mock Interviewer';
   static const history = 'History';
   static const topics = 'Topics';
@@ -16,4 +16,6 @@ final class Constants {
   static const delete = 'Delete';
   static const deleteAlertText = 'Are you sure you want to delete';
   static const study = 'Study';
+
+  static const startInterview = 'Start Interview';
 }

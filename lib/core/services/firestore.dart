@@ -9,6 +9,7 @@ abstract class FirestoreKey {
 
 class Firestore {
   static Firestore instance = Firestore._();
+
   Firestore._() {
     _firestore = FirebaseFirestore.instance;
 
@@ -18,14 +19,17 @@ class Firestore {
   late final FirebaseFirestore _firestore;
   late final CollectionReference _topics;
   final topicStream = StreamController<List<Topic>>();
+  final List<Topic> topics = [];
 
   void allTopics() {
     _topics.snapshots().listen((snapshot) {
- 
-      topicStream.sink.add(snapshot.docs
+      topics.clear();
+      topics.addAll(snapshot.docs
           .map((doc) => Topic.fromJson(
               documentID: doc.id, json: doc.data() as Map<String, dynamic>))
           .toList());
+
+      topicStream.sink.add(topics);
     });
   }
 
@@ -36,5 +40,9 @@ class Firestore {
 
   Future<void> deleteTopic(Topic topic) async {
     await _topics.doc(topic.documentID).delete();
+  }
+
+  void dispose() {
+    topicStream.close();
   }
 }

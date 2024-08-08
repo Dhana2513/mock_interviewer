@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../core/constants/asset_images.dart';
+part of '../models/topic.dart';
 
 enum TopicType { dart, flutter, other }
 
@@ -13,6 +11,17 @@ extension TopicTypeX on TopicType {
         return TopicType.flutter;
       default:
         return TopicType.other;
+    }
+  }
+
+  String get stringValue {
+    switch (this) {
+      case TopicType.dart:
+        return 'Dart';
+      case TopicType.flutter:
+        return 'Flutter';
+      default:
+        return 'Other';
     }
   }
 

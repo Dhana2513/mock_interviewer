@@ -3,11 +3,11 @@ import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/core/services/gen_ai.dart';
+import 'package:mock_interviewer/core/widgets/ui_button.dart';
 
 import '../../core/constants/asset_images.dart';
 import '../../core/constants/constants.dart';
 import '../../shared/models/topic.dart';
-import '../../shared/types/topic_type.dart';
 
 class AddTopic extends StatefulWidget {
   const AddTopic({super.key});
@@ -103,10 +103,8 @@ class _AddTopicState extends State<AddTopic> {
                 } else {
                   return SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor),
-                      onPressed: () async {
+                    child: UIButton(
+                     onPressed: () async {
                         final topicName = topicNameController.text.trim();
                         final topicType = flutterSelected
                             ? TopicType.flutter
@@ -134,10 +132,7 @@ class _AddTopicState extends State<AddTopic> {
 
                         popDialog();
                       },
-                      child: const Text(
-                        Constants.submit,
-                        style: TextStyle(color: Colors.white),
-                      ),
+                     title:  Constants.submit,
                     ),
                   );
                 }

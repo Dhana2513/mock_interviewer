@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final class ColumnX {
+abstract class ColumnX {
   static Widget builder({
     required int itemCount,
     required Widget Function(int index) itemBuilder,

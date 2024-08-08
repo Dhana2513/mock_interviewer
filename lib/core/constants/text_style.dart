@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
 
-final class UITextStyle {
+abstract class UITextStyle {
   static const title = TextStyle(
     fontSize: TextSize.large,
     fontWeight: FontWeight.w500,

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mock_interviewer/core/services/remote_config.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
-import 'package:mock_interviewer/shared/types/topic_type.dart';
 
 class GenAI {
   static GenAI instance = GenAI._();
