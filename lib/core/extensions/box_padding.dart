@@ -1,4 +1,4 @@
-abstract class BoxPadding {
+final class BoxPadding {
   static const xxSmall = 4.0;
   static const xSmall = 6.0;
   static const small = 8.0;

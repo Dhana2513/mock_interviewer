@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-abstract class RemoteConfigKeys {
+abstract class RemoteConfigKey {
   static const geminiApiKey = 'gemini_api_key';
 }
 
@@ -15,6 +15,6 @@ class RemoteConfig {
   late final FirebaseRemoteConfig _configs;
 
   String get geminiApiKey {
-    return _configs.getString(RemoteConfigKeys.geminiApiKey);
+    return _configs.getString(RemoteConfigKey.geminiApiKey);
   }
 }

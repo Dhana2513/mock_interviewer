@@ -1,4 +1,4 @@
-abstract class TextSize {
+final class TextSize {
   static const xxSmall = 8.0;
   static const xSmall = 10.0;
   static const small = 11.0;
