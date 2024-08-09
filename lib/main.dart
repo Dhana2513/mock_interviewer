@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/home/home_screen.dart';
-import 'package:mock_interviewer/voice_test.dart';
 
 import 'firebase_options.dart';
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
         useMaterial3: true,
       ),
-      // home: const VoiceTest(),
       home: const HomeScreen(),
     );
   }

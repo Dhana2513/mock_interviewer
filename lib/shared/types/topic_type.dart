@@ -4,7 +4,7 @@ enum TopicType { dart, flutter, other }
 
 extension TopicTypeX on TopicType {
   static TopicType fromString(String type) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'dart':
         return TopicType.dart;
       case 'flutter':

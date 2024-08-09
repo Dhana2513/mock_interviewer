@@ -17,7 +17,7 @@ class FireStorage {
     final result = await data;
     final dateTime = DateTime.now();
     final fileName =
-        '${dateTime.day}_${dateTime.month}_${dateTime.year}_${dateTime.hour}_${dateTime.minute}.mp4';
+        '${dateTime.day}_${dateTime.month}_${dateTime.year}_${dateTime.hour}_${dateTime.minute}';
 
     await _storage.ref(fileName).putData(result);
   }

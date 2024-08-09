@@ -8,9 +8,6 @@ abstract class _TopicKey {
   static const topicType = 'topicType';
 
   static const description = 'description';
-  static const dart = 'dart';
-  static const flutter = 'flutter';
-  static const other = 'other';
 }
 
 class Topic {

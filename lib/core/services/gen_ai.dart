@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mock_interviewer/core/services/remote_config.dart';
@@ -28,14 +27,11 @@ class GenAI {
       final prompt = RemoteConfig.instance.topicPrompt
           .replaceAll('<<topicName>>', '$initText${topic.name}');
 
-      log('dddd :added prompt : $prompt');
-
       final content = [Content.text(prompt)];
       final response = await _genAIModel.generateContent(content);
 
-      log('dddd : topic response : ${response.text}');
       return response.text ?? '';
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return '';
     }
   }
@@ -47,8 +43,6 @@ class GenAI {
       final prompt = RemoteConfig.instance.interviewPrompt
           .replaceAll('<<topicList>>', '$topicNames');
 
-      log('dddd :added prompt : $prompt');
-
       final content = [Content.text(prompt)];
       final response = await _genAIModel.generateContent(
         content,
@@ -57,9 +51,8 @@ class GenAI {
         ),
       );
 
-      log('dddd : topic response : ${response.text}');
       return jsonDecode(response.text ?? '[]');
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return [];
     }
   }

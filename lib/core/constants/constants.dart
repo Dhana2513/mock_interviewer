@@ -9,19 +9,19 @@ abstract class Constants {
   static const dart = 'Dart';
   static const other = 'Other';
   static const submit = 'Submit';
-  static const noTopicsMessage =
-      'Add a topics by clicking on the add button, your added '
-      'topics will be shown here.';
-  static const cancel = 'cancel';
+  static const cancel = 'Cancel';
   static const delete = 'Delete';
-  static const deleteAlertText = 'Are you sure you want to delete';
   static const study = 'Study';
+  static const next = 'Next';
 
   static const startInterview = 'Start Interview';
 
-  static const errorOccurred = 'Error Occurred while generating content ...';
+  static const noTopicsMessage =
+      'Add a topics by clicking on the add button, your added topics will be shown here.';
 
-  static const next = 'Next';
+  static const deleteAlertText = 'Are you sure you want to delete';
+
+  static const errorOccurred = 'Error Occurred while generating content ...';
 
   static const uploadingInterview = 'Uploading interview to Firebase';
 }

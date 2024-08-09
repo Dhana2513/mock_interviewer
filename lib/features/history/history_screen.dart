@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
-import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
-import 'package:mock_interviewer/core/widgets/video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/models/video_details.dart';
@@ -52,19 +50,12 @@ class _HistoryScreenState extends State<HistoryScreen>
 
                 return Card(
                   margin: const EdgeInsets.symmetric(
-                      horizontal: BoxPadding.basic,
-                      vertical: BoxPadding.xxSmall),
+                    horizontal: BoxPadding.basic,
+                    vertical: BoxPadding.xxSmall,
+                  ),
                   color: Colors.white,
                   child: ListTile(
-                    onTap: () {
-
-                      launchInBrowser(Uri.parse(video.path));
-                      // UINavigator.push(
-                      //     context: context,
-                      //     screen: VideoPlayer(
-                      //       video: video,
-                      //     ));
-                    },
+                    onTap: () => launchInBrowser(Uri.parse(video.path)),
                     leading: const Icon(Icons.play_circle_outline_rounded),
                     title: Text(video.name),
                   ),
