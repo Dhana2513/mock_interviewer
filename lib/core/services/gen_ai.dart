@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mock_interviewer/core/services/remote_config.dart';
@@ -9,7 +10,7 @@ class GenAI {
 
   GenAI._() {
     _genAIModel = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
+      model: RemoteConfig.instance.geminiModel,
       apiKey: RemoteConfig.instance.geminiApiKey,
     );
   }
@@ -31,7 +32,8 @@ class GenAI {
       final response = await _genAIModel.generateContent(content);
 
       return response.text ?? '';
-    } on Exception catch (_) {
+    } on Exception catch (error) {
+      log('prompt failed : $error');
       return '';
     }
   }
@@ -52,7 +54,8 @@ class GenAI {
       );
 
       return jsonDecode(response.text ?? '[]');
-    } on Exception catch (_) {
+    }  on Exception catch (error) {
+      log('prompt failed : $error');
       return [];
     }
   }

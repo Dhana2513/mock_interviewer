@@ -51,6 +51,16 @@ class _InterviewScreenState extends State<InterviewScreen>
     allTopics.add(listByTopicType(TopicType.flutter));
   }
 
+  bool get noTopicsForInterview {
+    for (final topics in allTopics) {
+      if (topics.isNotEmpty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   void navigateToRecordInterviewScreen(List<Question> questions) {
     UINavigator.push(
         context: context, screen: RecordInterviewScreen(questions: questions));
@@ -87,66 +97,78 @@ class _InterviewScreenState extends State<InterviewScreen>
         padding: const EdgeInsets.all(BoxPadding.basic),
         child: ListView(
           children: [
-            ColumnX.builder(
-                itemCount: allTopics.length,
-                itemBuilder: (index) {
-                  final topics = allTopics[index];
+            if (noTopicsForInterview) ...[
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(BoxPadding.basic),
+                  child: Text(
+                    Constants.noTopicsForInterview,
+                    style: UITextStyle.bodyLarge,
+                  ),
+                ),
+              )
+            ] else ...[
+              ColumnX.builder(
+                  itemCount: allTopics.length,
+                  itemBuilder: (index) {
+                    final topics = allTopics[index];
 
-                  if (topics.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          topics.first.topicType.stringValue,
-                          style: UITextStyle.subtitle,
-                        ),
-                        const SizedBox(height: BoxPadding.small),
-                        WrapX.builder<Topic>(
-                          items: topics,
-                          itemBuilder: (topic) {
-                            return Padding(
-                              padding: const EdgeInsets.all(BoxPadding.small),
-                              child: FilterChip(
-                                selected: topic.selected ?? false,
-                                selectedColor:
-                                    Theme.of(context).primaryColorLight,
-                                onSelected: (value) {
-                                  setState(() {
-                                    topic.selected = value;
-                                  });
-                                },
-                                avatar: Image(image: topic.topicType.image),
-                                label: Text(topic.name),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: BoxPadding.small),
-                      ],
-                    ),
-                  );
-                }),
-            const SizedBox(height: BoxPadding.medium),
-            SizedBox(
-              height: BoxPadding.xLarge + BoxPadding.small,
-              child: ValueListenableBuilder(
-                  valueListenable: loadingNotifier,
-                  builder: (context, loading, child) {
-                    if (loading == true) {
-                      return const Center(child: CircularProgressIndicator());
+                    if (topics.isEmpty) {
+                      return const SizedBox.shrink();
                     }
 
-                    return UIButton(
-                      onPressed: startInterview,
-                      title: Constants.startInterview,
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            topics.first.topicType.stringValue,
+                            style: UITextStyle.subtitle,
+                          ),
+                          const SizedBox(height: BoxPadding.small),
+                          WrapX.builder<Topic>(
+                            items: topics,
+                            itemBuilder: (topic) {
+                              return Padding(
+                                padding: const EdgeInsets.all(BoxPadding.small),
+                                child: FilterChip(
+                                  selected: topic.selected ?? false,
+                                  selectedColor:
+                                      Theme.of(context).primaryColorLight,
+                                  onSelected: (value) {
+                                    setState(() {
+                                      topic.selected = value;
+                                    });
+                                  },
+                                  avatar: Image(image: topic.topicType.image),
+                                  label: Text(topic.name),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: BoxPadding.small),
+                        ],
+                      ),
                     );
                   }),
-            ),
+              const SizedBox(height: BoxPadding.medium),
+              SizedBox(
+                height: BoxPadding.xLarge + BoxPadding.small,
+                child: ValueListenableBuilder(
+                    valueListenable: loadingNotifier,
+                    builder: (context, loading, child) {
+                      if (loading == true) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      return UIButton(
+                        onPressed: startInterview,
+                        title: Constants.startInterview,
+                      );
+                    }),
+              ),
+            ],
           ],
         ),
       ),

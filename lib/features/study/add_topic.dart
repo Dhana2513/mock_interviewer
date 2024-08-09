@@ -95,7 +95,7 @@ class _AddTopicState extends State<AddTopic> {
           ),
           const SizedBox(height: BoxPadding.large),
           SizedBox(
-            height: BoxPadding.xLarge,
+            height: BoxPadding.xLarge + BoxPadding.small,
             child: ValueListenableBuilder(
               valueListenable: loadingNotifier,
               builder: (context, loading, child) {

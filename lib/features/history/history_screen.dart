@@ -3,6 +3,8 @@ import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/constants/constants.dart';
+import '../../core/constants/text_style.dart';
 import '../../shared/models/video_details.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -42,6 +44,22 @@ class _HistoryScreenState extends State<HistoryScreen>
       child: FutureBuilder(
           future: futureVideos,
           builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.data?.isEmpty == true) {
+              return ListView(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(BoxPadding.large),
+                    child: Text(
+                      Constants.noInterviewHistory,
+                      style: UITextStyle.bodyLarge,
+                    ),
+                  ),
+                ],
+              );
+            }
+
             final videos = snapshot.data ?? [];
             return ListView.builder(
               itemCount: videos.length,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mock_interviewer/core/widgets/main_scaffold.dart';
-import 'package:mock_interviewer/features/history/history_screen.dart';
-import 'package:mock_interviewer/features/interview/interview_screen.dart';
-import 'package:mock_interviewer/features/study/study_screen.dart';
 
-import '../core/constants/constants.dart';
+import '../../core/constants/constants.dart';
+import '../../core/widgets/main_scaffold.dart';
+import '../history/history_screen.dart';
+import '../interview/interview_screen.dart';
+import '../study/study_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,8 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int bottomNavIndex = 0;
   late final PageController pageController;
+  int bottomNavIndex = 0;
 
   @override
   void initState() {
@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -46,6 +46,31 @@ class _StudyScreenState extends State<StudyScreen>
         ),
       );
 
+  void showDeleteAlert({required Topic topic}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${Constants.delete} ${topic.name}?'),
+          content: Text('${Constants.deleteAlertText} ${topic.name}?'),
+          actions: [
+            TextButton(
+              child: const Text(Constants.delete),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Firestore.instance.deleteTopic(topic);
+              },
+            ),
+            TextButton(
+              child: const Text(Constants.cancel),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -142,31 +167,6 @@ class _StudyScreenState extends State<StudyScreen>
         ),
         addTopicButton,
       ],
-    );
-  }
-
-  void showDeleteAlert({required Topic topic}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('${Constants.delete} ${topic.name}?'),
-          content: Text('${Constants.deleteAlertText} ${topic.name}?'),
-          actions: [
-            TextButton(
-              child: const Text(Constants.delete),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                Firestore.instance.deleteTopic(topic);
-              },
-            ),
-            TextButton(
-              child: const Text(Constants.cancel),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        );
-      },
     );
   }
 

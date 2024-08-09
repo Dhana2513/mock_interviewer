@@ -17,7 +17,15 @@ abstract class Constants {
   static const startInterview = 'Start Interview';
 
   static const noTopicsMessage =
-      'Add a topics by clicking on the add button, your added topics will be shown here.';
+      'Add topics by clicking the "+" button. Your added topics will be displayed here.';
+
+  static const noTopicsForInterview =
+      'There are currently no available topics for the interview. Please go to the Study screen and add topics.\n\n'
+      'Pull to refresh this screen';
+
+  static const noInterviewHistory =
+      'There are currently no available topics for the interview. Please go to the Study screen and add topics.\n\n'
+      'Pull to refresh this screen';
 
   static const deleteAlertText = 'Are you sure you want to delete';
 
