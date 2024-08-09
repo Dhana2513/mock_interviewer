@@ -21,4 +21,7 @@ abstract class Constants {
 
   static const errorOccurred = 'Error Occurred while generating content ...';
 
+  static const next = 'Next';
+
+  static const uploadingInterview = 'Uploading interview to Firebase';
 }

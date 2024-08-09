@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/constants/constants.dart';
 import 'package:mock_interviewer/core/constants/text_style.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/columnx.dart';
+import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/widgets/ui_button.dart';
+import 'package:mock_interviewer/features/interview/record_interview_screen.dart';
 import 'package:mock_interviewer/shared/models/question.dart';
 
 import '../../core/extensions/wrapx.dart';
@@ -50,14 +51,27 @@ class _InterviewScreenState extends State<InterviewScreen>
     allTopics.add(listByTopicType(TopicType.flutter));
   }
 
+  void navigateToRecordInterviewScreen(List<Question> questions) {
+    UINavigator.push(
+        context: context, screen: RecordInterviewScreen(questions: questions));
+  }
+
   void startInterview() async {
     final topics = <Topic>[];
     for (final item in allTopics) {
       topics.addAll(item.where((topic) => topic.selected == true).toList());
     }
 
+    if (topics.isEmpty) {
+      return;
+    }
+
+    loadingNotifier.value = true;
     final result = await GenAI.instance.getQuestions(topics: topics);
-    final questions = Question.fromJsonList(json: result);
+    loadingNotifier.value = false;
+
+    final questions = Question.fromJsonList(jsonList: result);
+    navigateToRecordInterviewScreen(questions);
   }
 
   @override
@@ -124,7 +138,7 @@ class _InterviewScreenState extends State<InterviewScreen>
                   valueListenable: loadingNotifier,
                   builder: (context, loading, child) {
                     if (loading == true) {
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     return UIButton(

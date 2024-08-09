@@ -40,9 +40,7 @@ class GenAI {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getQuestions({
-    required List<Topic> topics,
-  }) async {
+  Future<List> getQuestions({required List<Topic> topics}) async {
     try {
       final topicNames = topics.map((topic) => topic.name).toList();
 

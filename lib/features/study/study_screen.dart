@@ -8,6 +8,7 @@ import 'package:mock_interviewer/features/study/topic_description_screen.dart';
 import 'package:mock_interviewer/shared/models/topic.dart';
 
 import '../../core/constants/text_style.dart';
+import '../../core/extensions/ui_navigator.dart';
 
 class StudyScreen extends StatefulWidget {
   const StudyScreen({super.key});
@@ -100,12 +101,13 @@ class _StudyScreenState extends State<StudyScreen>
                                 horizontal: BoxPadding.small),
                             child: ListTile(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        TopicDescriptionScreen(
-                                          topics: topics,
-                                          index: index,
-                                        )));
+                                UINavigator.push(
+                                  context: context,
+                                  screen: TopicDescriptionScreen(
+                                    topics: topics,
+                                    index: index,
+                                  ),
+                                );
                               },
                               tileColor: Colors.white,
                               shape: const RoundedRectangleBorder(
