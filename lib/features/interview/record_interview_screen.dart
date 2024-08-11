@@ -40,7 +40,7 @@ class _RecordInterviewScreenState extends State<RecordInterviewScreen> {
     controller = CameraController(
       _cameras.firstWhere(
           (camera) => camera.lensDirection == CameraLensDirection.front),
-      ResolutionPreset.max,
+      ResolutionPreset.medium,
       enableAudio: true,
     );
     controller?.initialize().then((_) {
