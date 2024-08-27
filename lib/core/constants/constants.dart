@@ -13,6 +13,7 @@ abstract class Constants {
   static const delete = 'Delete';
   static const study = 'Study';
   static const next = 'Next';
+  static const ok = 'Ok';
 
   static const startInterview = 'Start Interview';
 
@@ -32,4 +33,13 @@ abstract class Constants {
   static const errorOccurred = 'Error Occurred while generating content ...';
 
   static const uploadingInterview = 'Uploading interview to Firebase';
+
+  static const selectTopics = 'Select Topics';
+
+  static const selectTopicsForInterview =
+      'Please select the topics for interview.';
+
+  static const deleteVideo = 'Delete Video';
+
+  static const deleteVideoMessage = 'Are you sure you want to delete <<video>>?';
 }

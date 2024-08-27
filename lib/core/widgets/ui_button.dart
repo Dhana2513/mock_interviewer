@@ -13,7 +13,10 @@ class UIButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).primaryColor),
       onPressed: onPressed,
-      child: Text(title, style: UITextStyle.subtitle.copyWith(color: Colors.white),),
+      child: Text(
+        title,
+        style: UITextStyle.subtitle.copyWith(color: Colors.white),
+      ),
     );
   }
 }

@@ -28,11 +28,16 @@ class FireStorage {
 
     for (final ref in result.items) {
       videos.add(VideoDetails(
+        reference: ref,
         name: ref.name,
         path: await ref.getDownloadURL(),
       ));
     }
 
     return videos;
+  }
+
+  Future<void> deleteVideo(VideoDetails videoDetails) async{
+    await videoDetails.reference.delete();
   }
 }

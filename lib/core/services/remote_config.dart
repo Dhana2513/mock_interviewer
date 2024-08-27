@@ -9,6 +9,7 @@ abstract class _RemoteConfigKey {
 
 class RemoteConfig {
   static RemoteConfig instance = RemoteConfig._();
+
   RemoteConfig._() {
     _configs = FirebaseRemoteConfig.instance;
     _configs.ensureInitialized();
@@ -25,14 +26,11 @@ class RemoteConfig {
     return _configs.getString(_RemoteConfigKey.geminiModel);
   }
 
-
   String get topicPrompt {
     return _configs.getString(_RemoteConfigKey.topicPrompt);
   }
 
-
   String get interviewPrompt {
     return _configs.getString(_RemoteConfigKey.interviewPrompt);
   }
-
 }

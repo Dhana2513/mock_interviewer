@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
+import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,6 +22,10 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   void initState() {
     super.initState();
+    getData();
+  }
+
+  void getData() {
     futureVideos = FireStorage.instance.getAllVideos();
   }
 
@@ -31,6 +36,36 @@ class _HistoryScreenState extends State<HistoryScreen>
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void deleteVideo(VideoDetails video) async {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text(Constants.deleteVideo),
+              content: Text(
+                Constants.deleteVideoMessage
+                    .replaceAll('<<video>>', video.name),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                      await FireStorage.instance.deleteVideo(video);
+                      getData();
+                      setState(() {});
+                    });
+
+                    UINavigator.pop(context);
+                  },
+                  child: const Text(Constants.delete),
+                ),
+                TextButton(
+                  onPressed: () => UINavigator.pop(context),
+                  child: const Text(Constants.cancel),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -75,6 +110,13 @@ class _HistoryScreenState extends State<HistoryScreen>
                   child: ListTile(
                     onTap: () => launchInBrowser(Uri.parse(video.path)),
                     leading: const Icon(Icons.play_circle_outline_rounded),
+                    trailing: IconButton(
+                      icon: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.delete),
+                      ),
+                      onPressed: () => deleteVideo(video),
+                    ),
                     title: Text(video.name),
                   ),
                 );

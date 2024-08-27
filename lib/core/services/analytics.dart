@@ -9,9 +9,12 @@ class Analytics {
 
   late final FirebaseAnalytics _analytics;
 
-  Future<void> logErrorEvent({required String stacktrace, required String errorCode}) async {
+  Future<void> logErrorEvent({
+    required String stacktrace,
+    required String errorCode,
+  }) async {
     await _analytics.logEvent(
-      name: 'error',
+      name: 'error_log',
       parameters: <String, Object>{
         'stacktrace': stacktrace,
         'errorCode': errorCode,

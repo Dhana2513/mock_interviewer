@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../constants/constants.dart';
 import '../constants/text_style.dart';
 
-
 class MainScaffold extends StatelessWidget {
   const MainScaffold({
     super.key,

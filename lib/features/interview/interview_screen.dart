@@ -73,6 +73,19 @@ class _InterviewScreenState extends State<InterviewScreen>
     }
 
     if (topics.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(Constants.selectTopics),
+          content: const Text(Constants.selectTopicsForInterview),
+          actions: [
+            TextButton(
+              onPressed: () => UINavigator.pop(context),
+              child: const Text(Constants.ok),
+            )
+          ],
+        ),
+      );
       return;
     }
 
