@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: Build & Release
+    name: Build APK
     runs-on: macos-latest
 
     steps:
