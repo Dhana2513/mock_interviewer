@@ -12,16 +12,21 @@ on:
 
 jobs:
   build:
-    name: Build APK .
+    name: Build & Release
     runs-on: macos-latest
+    if: contains(github.event.head_commit.message, 'build:')
 
     steps:
       # 0. Check Commit Message for 'build:'
       - name: Check Commit Message
         run: |
+          echo "Testing commit"
+          echo $(git log -1 --pretty=%B)
           if [[ ! $(git log -1 --pretty=%B) =~ build: ]]; then
             echo "Commit message does not contain 'build:'. Skipping build."
             exit 0
+          else
+            echo "No Problem.."
           fi
 
       #1 Checkout Repository
