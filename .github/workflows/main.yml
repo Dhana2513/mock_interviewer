@@ -10,14 +10,21 @@ on:
       - main
       - develop
 
-jobs:  
-  build:      
-    name: Build & Release 
+jobs:
+  build:
+    name: Build & Release
     runs-on: macos-latest
-    if: contains(github.event.head_commit.message, 'build:')
 
     steps:
-        #1 Checkout Repository
+      # 0. Check Commit Message for 'build:'
+      - name: Check Commit Message
+        run: |
+          if [[ ! $(git log -1 --pretty=%B) =~ build: ]]; then
+            echo "Commit message does not contain 'build:'. Skipping build."
+            exit 0
+          fi
+
+      #1 Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
@@ -39,7 +46,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-       #6 Building APK
+      #6 Building APK
       - name: Build APK
         run: flutter build apk --release
 
@@ -49,8 +56,8 @@ jobs:
         with:
           name: Releases
           path: build/app/outputs/flutter-apk/app-release.apk
-  #           build/app/outputs/bundle/release/app-release.aab
-  #           build/ios_build.tar.gz
+        #           build/app/outputs/bundle/release/app-release.aab
+        #           build/ios_build.tar.gz
 
         #10 Extract Version
       - name: Extract version from pubspec.yaml
