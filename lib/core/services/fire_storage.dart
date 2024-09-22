@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mock_interviewer/core/extensions/date_time_extension.dart';
 import 'package:mock_interviewer/shared/models/video_details.dart';
 
 class FireStorage {
@@ -15,11 +16,9 @@ class FireStorage {
 
   Future<void> uploadVideo(Future<Uint8List> data) async {
     final result = await data;
-    final dateTime = DateTime.now();
-    final fileName =
-        '${dateTime.day}_${dateTime.month}_${dateTime.year}_${dateTime.hour}_${dateTime.minute}';
+    final now = DateTime.now();
 
-    await _storage.ref(fileName).putData(result);
+    await _storage.ref(now.toFileName).putData(result);
   }
 
   Future<List<VideoDetails>> getAllVideos() async {
@@ -37,7 +36,7 @@ class FireStorage {
     return videos;
   }
 
-  Future<void> deleteVideo(VideoDetails videoDetails) async{
+  Future<void> deleteVideo(VideoDetails videoDetails) async {
     await videoDetails.reference.delete();
   }
 }

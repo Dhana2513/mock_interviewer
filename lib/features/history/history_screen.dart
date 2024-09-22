@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
+import 'package:mock_interviewer/core/extensions/string_extension.dart';
 import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                       ),
                       onPressed: () => deleteVideo(video),
                     ),
-                    title: Text(video.name),
+                    title: Text(video.name.formated),
                   ),
                 );
               },
