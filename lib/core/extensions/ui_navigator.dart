@@ -9,6 +9,14 @@ abstract class UINavigator {
         .push(MaterialPageRoute(builder: (context) => screen));
   }
 
+  static Future<T?> pushReplacement<T extends Object?>({
+    required BuildContext context,
+    required Widget screen,
+  }) {
+    return Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => screen));
+  }
+
   static void pop<T extends Object?>(BuildContext context, [T? result]) {
     Navigator.of(context).pop(result);
   }

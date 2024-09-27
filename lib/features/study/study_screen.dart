@@ -96,10 +96,17 @@ class _StudyScreenState extends State<StudyScreen>
                   final flutterTopics = unfilteredTopics
                       .where((topic) => topic.topicType == TopicType.flutter);
 
+                  final androidTopics = unfilteredTopics
+                      .where((topic) => topic.topicType == TopicType.android);
+                  final kotlinTopics = unfilteredTopics
+                      .where((topic) => topic.topicType == TopicType.kotlin);
+
                   final topics = [
                     ...otherTopics,
                     ...dartTopics,
-                    ...flutterTopics
+                    ...flutterTopics,
+                    ...kotlinTopics,
+                    ...androidTopics
                   ];
 
                   if (topics.isEmpty) {

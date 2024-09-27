@@ -1,12 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/string_extension.dart';
 import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
+import 'package:mock_interviewer/core/services/firestore.dart';
+import 'package:mock_interviewer/core/widgets/ui_button.dart';
+import 'package:mock_interviewer/features/history/questions_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/constants.dart';
 import '../../core/constants/text_style.dart';
+import '../../shared/models/question.dart';
 import '../../shared/models/video_details.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -69,6 +75,16 @@ class _HistoryScreenState extends State<HistoryScreen>
             ));
   }
 
+  void showQuestions(List<Question> questions) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: QuestionsDialog(questions: questions),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -102,25 +118,51 @@ class _HistoryScreenState extends State<HistoryScreen>
               itemBuilder: (context, index) {
                 final video = videos[index];
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: BoxPadding.basic,
-                    vertical: BoxPadding.xxSmall,
-                  ),
-                  color: Colors.white,
-                  child: ListTile(
-                    onTap: () => launchInBrowser(Uri.parse(video.path)),
-                    leading: const Icon(Icons.play_circle_outline_rounded),
-                    trailing: IconButton(
-                      icon: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.delete),
-                      ),
-                      onPressed: () => deleteVideo(video),
-                    ),
-                    title: Text(video.name.formated),
-                  ),
-                );
+                return FutureBuilder<(String, List<Question>)>(
+                    future: Firestore.instance.fetchQuestions(video.name),
+                    builder: (context, snapshot) {
+                      final username = snapshot.data?.$1 ?? '';
+                      final questions = snapshot.data?.$2 ?? [];
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: BoxPadding.basic,
+                          vertical: BoxPadding.xxSmall,
+                        ),
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () =>
+                                  launchInBrowser(Uri.parse(video.path)),
+                              leading:
+                                  const Icon(Icons.play_circle_outline_rounded),
+                              trailing: IconButton(
+                                icon: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.delete),
+                                ),
+                                onPressed: () => deleteVideo(video),
+                              ),
+                              title: Text(video.name.formated),
+                              subtitle: Row(
+                                children: [
+                                  Text(username),
+                                  const SizedBox(
+                                    width: BoxPadding.medium,
+                                  ),
+                                  if (questions.isNotEmpty)
+                                    TextButton(
+                                      child: const Text(Constants.questions),
+                                      onPressed: () => showQuestions(questions),
+                                    )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
               },
             );
           }),

@@ -19,4 +19,11 @@ class Question {
   static List<Question> fromJsonList({required List jsonList}) {
     return jsonList.map((json) => Question.fromJson(json: json)).toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      _QuestionKey.topic: topic,
+      _QuestionKey.question: question,
+    };
+  }
 }

@@ -6,7 +6,6 @@ import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/core/services/gen_ai.dart';
 import 'package:mock_interviewer/core/widgets/ui_button.dart';
 
-import '../../core/constants/asset_images.dart';
 import '../../core/constants/constants.dart';
 import '../../shared/models/topic.dart';
 
@@ -19,19 +18,22 @@ class AddTopic extends StatefulWidget {
 
 class _AddTopicState extends State<AddTopic> {
   final topicNameController = TextEditingController();
-
-  bool flutterSelected = true;
-  bool dartSelected = false;
-  bool otherSelected = false;
-
   final loadingNotifier = ValueNotifier<bool?>(false);
-
   final focusNode = FocusNode();
+  int selectedTypeIndex = 0;
+
+  final topicTypes = [
+    TopicType.flutter,
+    TopicType.dart,
+    TopicType.android,
+    TopicType.kotlin,
+    TopicType.other
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(BoxPadding.large),
+      padding: const EdgeInsets.symmetric(vertical: BoxPadding.large),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -44,113 +46,97 @@ class _AddTopicState extends State<AddTopic> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          const SizedBox(height: BoxPadding.large),
-          TextField(
-            focusNode: focusNode,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), hintText: Constants.topicName),
-            keyboardType: TextInputType.name,
-            textCapitalization: TextCapitalization.sentences,
-            controller: topicNameController,
-          ),
-          const SizedBox(height: BoxPadding.basic),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FilterChip(
-                selected: flutterSelected,
-                label: const Text(Constants.flutter),
-                avatar: Image(image: AssetImages.shared.flutter),
-                onSelected: (selected) {
-                  flutterSelected = true;
-                  dartSelected = false;
-                  otherSelected = false;
-                  setState(() {});
-                },
-              ),
-              FilterChip(
-                selected: dartSelected,
-                label: const Text(Constants.dart),
-                avatar: Image(image: AssetImages.shared.dart),
-                onSelected: (selected) {
-                  flutterSelected = false;
-                  dartSelected = true;
-                  otherSelected = false;
-                  setState(() {});
-                },
-              ),
-              FilterChip(
-                selected: otherSelected,
-                label: const Text(Constants.other),
-                avatar: Image(image: AssetImages.shared.curly),
-                onSelected: (selected) {
-                  flutterSelected = false;
-                  dartSelected = false;
-                  otherSelected = true;
-                  setState(() {});
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: BoxPadding.large),
-          SizedBox(
-            height: BoxPadding.xLarge + BoxPadding.small,
-            child: ValueListenableBuilder(
-              valueListenable: loadingNotifier,
-              builder: (context, loading, child) {
-                if (loading == null) {
-                  return Center(
-                    child: Text(
-                      Constants.errorOccurred,
-                      style: UITextStyle.body.copyWith(
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                } else if (loading == true) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: UIButton(
-                      onPressed: () async {
-                        final topicName = topicNameController.text.trim();
-                        final topicType = flutterSelected
-                            ? TopicType.flutter
-                            : dartSelected
-                                ? TopicType.dart
-                                : TopicType.other;
-
-                        if (topicName.isEmpty) return;
-
-                        focusNode.unfocus();
-                        loadingNotifier.value = true;
-
-                        final topic = Topic(
-                          name: topicName,
-                          topicType: topicType,
-                        );
-
-                        final description =
-                            await GenAI.instance.topicResponse(topic: topic);
-                        if (description.isNotEmpty) {
-                          topic.description = description;
-                          await Firestore.instance.addTopic(topic);
-                          loadingNotifier.value = false;
-                          popDialog();
-                        } else {
-                          loadingNotifier.value = null;
-                        }
-                      },
-                      title: Constants.submit,
-                    ),
-                  );
-                }
-              },
+          Padding(
+            padding: const EdgeInsets.only(
+              top: BoxPadding.large,
+              bottom: BoxPadding.basic,
+              left: BoxPadding.large,
+              right: BoxPadding.large,
+            ),
+            child: TextField(
+              focusNode: focusNode,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: Constants.topicName),
+              keyboardType: TextInputType.name,
+              textCapitalization: TextCapitalization.sentences,
+              controller: topicNameController,
             ),
           ),
-          const SizedBox(height: BoxPadding.basic)
+          Wrap(
+            children: [
+              for (int index = 0; index < topicTypes.length; index++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: BoxPadding.xxxSmall),
+                  child: FilterChip(
+                    selected: selectedTypeIndex == index,
+                    label: Text(topicTypes[index].stringValue),
+                    avatar: Image(image: topicTypes[index].image),
+                    onSelected: (selected) {
+                      if (selected) {
+                        selectedTypeIndex = index;
+                      }
+                      setState(() {});
+                    },
+                  ),
+                )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(BoxPadding.large),
+            child: SizedBox(
+              height: BoxPadding.xLarge + BoxPadding.small,
+              child: ValueListenableBuilder(
+                valueListenable: loadingNotifier,
+                builder: (context, loading, child) {
+                  if (loading == null) {
+                    return Center(
+                      child: Text(
+                        Constants.errorOccurred,
+                        style: UITextStyle.body.copyWith(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (loading == true) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: UIButton(
+                        onPressed: () async {
+                          final topicName = topicNameController.text.trim();
+                          final topicType = topicTypes[selectedTypeIndex];
+
+                          if (topicName.isEmpty) return;
+
+                          focusNode.unfocus();
+                          loadingNotifier.value = true;
+
+                          final topic = Topic(
+                            name: topicName,
+                            topicType: topicType,
+                          );
+
+                          final description =
+                              await GenAI.instance.topicResponse(topic: topic);
+                          if (description.isNotEmpty) {
+                            topic.description = description;
+                            await Firestore.instance.addTopic(topic);
+                            loadingNotifier.value = false;
+                            popDialog();
+                          } else {
+                            loadingNotifier.value = null;
+                          }
+                        },
+                        title: Constants.submit,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

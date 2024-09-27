@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mock_interviewer/core/extensions/date_time_extension.dart';
+import 'package:mock_interviewer/shared/models/question.dart';
 import 'package:mock_interviewer/shared/models/video_details.dart';
+
+import 'firestore.dart';
 
 class FireStorage {
   static FireStorage instance = FireStorage._();
@@ -14,11 +17,18 @@ class FireStorage {
 
   late final FirebaseStorage _storage;
 
-  Future<void> uploadVideo(Future<Uint8List> data) async {
+  Future<void> uploadVideo({
+    required List<Question> questions,
+    required Future<Uint8List> data,
+  }) async {
     final result = await data;
-    final now = DateTime.now();
+    final fileName = DateTime.now().toFileName;
 
-    await _storage.ref(now.toFileName).putData(result);
+    await _storage.ref(fileName).putData(result);
+    await Firestore.instance.addQuestions(
+      fileName: fileName,
+      questions: questions,
+    );
   }
 
   Future<List<VideoDetails>> getAllVideos() async {

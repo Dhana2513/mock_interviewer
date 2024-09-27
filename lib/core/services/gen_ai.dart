@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:mock_interviewer/core/services/remote_config.dart';
@@ -20,11 +21,7 @@ class GenAI {
 
   Future<String> topicResponse({required Topic topic}) async {
     try {
-      final initText = topic.topicType == TopicType.dart
-          ? 'dart: '
-          : topic.topicType == TopicType.flutter
-              ? 'flutter: '
-              : '';
+      final initText = topic.topicType.promptInitials;
 
       final prompt = RemoteConfig.instance.topicPrompt
           .replaceAll('<<topicName>>', '$initText${topic.name}');
@@ -34,6 +31,7 @@ class GenAI {
 
       return response.text ?? '';
     } on Exception catch (error) {
+      log(error.toString());
       Analytics.instance.logErrorEvent(stacktrace: '$error', errorCode: '101');
       return '';
     }

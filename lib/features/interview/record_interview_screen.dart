@@ -108,7 +108,10 @@ class _RecordInterviewScreenState extends State<RecordInterviewScreen> {
     tick();
     final result = await controller?.stopVideoRecording();
     if (result != null) {
-      await FireStorage.instance.uploadVideo(result.readAsBytes());
+      await FireStorage.instance.uploadVideo(
+        questions: widget.questions,
+        data: result.readAsBytes(),
+      );
     }
     loadingNotifier.value = false;
     popScreen();

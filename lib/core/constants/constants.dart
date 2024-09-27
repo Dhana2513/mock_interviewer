@@ -14,6 +14,8 @@ abstract class Constants {
   static const study = 'Study';
   static const next = 'Next';
   static const ok = 'Ok';
+  static const login = 'Login';
+  static const questions = 'Questions';
 
   static const startInterview = 'Start Interview';
 

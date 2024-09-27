@@ -1,4 +1,15 @@
+import 'package:recase/recase.dart';
+
 extension StringX on String {
+  String get camelCase {
+    return ReCase(this).camelCase;
+  }
+
+  String get sentenceCase {
+    return ReCase(this).sentenceCase;
+  }
+
+
   String get formated {
     try {
       final parts = split('_');
@@ -32,29 +43,29 @@ extension StringX on String {
   String getMonthName(int month) {
     switch (month) {
       case 1:
-        return 'JAN';
+        return 'Jan';
       case 2:
-        return 'FEB';
+        return 'Feb';
       case 3:
-        return 'MAR';
+        return 'Mar';
       case 4:
-        return 'APR';
+        return 'Apr';
       case 5:
-        return 'MAY';
+        return 'May';
       case 6:
-        return 'JUN';
+        return 'Jun';
       case 7:
-        return 'JUL';
+        return 'Jul';
       case 8:
-        return 'AUG';
+        return 'Aug';
       case 9:
-        return 'SEPT';
+        return 'Sept';
       case 10:
-        return 'OCT';
+        return 'Oct';
       case 11:
-        return 'NOV';
+        return 'Nov';
       case 12:
-        return 'DEC';
+        return 'Dec';
       default:
         return 'Invalid month';
     }

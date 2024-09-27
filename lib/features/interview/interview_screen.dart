@@ -49,6 +49,8 @@ class _InterviewScreenState extends State<InterviewScreen>
     allTopics.add(listByTopicType(TopicType.other));
     allTopics.add(listByTopicType(TopicType.dart));
     allTopics.add(listByTopicType(TopicType.flutter));
+    allTopics.add(listByTopicType(TopicType.kotlin));
+    allTopics.add(listByTopicType(TopicType.android));
   }
 
   bool get noTopicsForInterview {
