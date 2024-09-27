@@ -6,7 +6,7 @@ import 'package:mock_interviewer/core/extensions/string_extension.dart';
 import 'package:mock_interviewer/core/extensions/ui_navigator.dart';
 import 'package:mock_interviewer/core/services/fire_storage.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
-import 'package:mock_interviewer/core/widgets/ui_button.dart';
+import 'package:mock_interviewer/core/services/local_storage.dart';
 import 'package:mock_interviewer/features/history/questions_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -124,44 +124,55 @@ class _HistoryScreenState extends State<HistoryScreen>
                       final username = snapshot.data?.$1 ?? '';
                       final questions = snapshot.data?.$2 ?? [];
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: BoxPadding.basic,
-                          vertical: BoxPadding.xxSmall,
-                        ),
-                        color: Colors.white,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              onTap: () =>
-                                  launchInBrowser(Uri.parse(video.path)),
-                              leading:
-                                  const Icon(Icons.play_circle_outline_rounded),
-                              trailing: IconButton(
-                                icon: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.delete),
-                                ),
-                                onPressed: () => deleteVideo(video),
-                              ),
-                              title: Text(video.name.formated),
-                              subtitle: Row(
-                                children: [
-                                  Text(username),
-                                  const SizedBox(
-                                    width: BoxPadding.medium,
+                      final userCheck = LocalStorage.instance.userName
+                              .toLowerCase()
+                              .contains(username.toLowerCase()) &&
+                          username.isNotEmpty;
+
+                      if (userCheck ||
+                          username.toLowerCase().contains('dhana')) {
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: BoxPadding.basic,
+                            vertical: BoxPadding.xxSmall,
+                          ),
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              ListTile(
+                                onTap: () =>
+                                    launchInBrowser(Uri.parse(video.path)),
+                                leading: const Icon(
+                                    Icons.play_circle_outline_rounded),
+                                trailing: IconButton(
+                                  icon: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(Icons.delete),
                                   ),
-                                  if (questions.isNotEmpty)
-                                    TextButton(
-                                      child: const Text(Constants.questions),
-                                      onPressed: () => showQuestions(questions),
-                                    )
-                                ],
+                                  onPressed: () => deleteVideo(video),
+                                ),
+                                title: Text(video.name.formated),
+                                subtitle: Row(
+                                  children: [
+                                    Text(username),
+                                    const SizedBox(
+                                      width: BoxPadding.medium,
+                                    ),
+                                    if (questions.isNotEmpty)
+                                      TextButton(
+                                        child: const Text(Constants.questions),
+                                        onPressed: () =>
+                                            showQuestions(questions),
+                                      )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                            ],
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
                     });
               },
             );
