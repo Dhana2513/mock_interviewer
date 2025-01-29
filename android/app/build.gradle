@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.example.mock_interviewer"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
