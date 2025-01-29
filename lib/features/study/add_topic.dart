@@ -4,6 +4,7 @@ import 'package:mock_interviewer/core/extensions/box_padding.dart';
 import 'package:mock_interviewer/core/extensions/text_size.dart';
 import 'package:mock_interviewer/core/services/firestore.dart';
 import 'package:mock_interviewer/core/services/gen_ai.dart';
+import 'package:mock_interviewer/core/services/local_storage.dart';
 import 'package:mock_interviewer/core/widgets/ui_button.dart';
 
 import '../../core/constants/constants.dart';
@@ -22,13 +23,27 @@ class _AddTopicState extends State<AddTopic> {
   final focusNode = FocusNode();
   int selectedTypeIndex = 0;
 
-  final topicTypes = [
-    TopicType.flutter,
-    TopicType.dart,
+  List<TopicType> topicTypes = [
     TopicType.android,
     TopicType.kotlin,
+    TopicType.flutter,
+    TopicType.dart,
     TopicType.other
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (LocalStorage.instance.userName.toLowerCase().contains('kshitij')) {
+      topicTypes = [
+        TopicType.flutter,
+        TopicType.dart,
+        TopicType.android,
+        TopicType.kotlin,
+        TopicType.other
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
